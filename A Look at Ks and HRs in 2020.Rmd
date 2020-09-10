@@ -1,20 +1,22 @@
 ---
 title: "A Look at Strikeout and Homerun Rates in 2020"
+author: "by Dani Treisman"
 output:
   pdf_document: default
+  word_document: default
   html_document: default
-subtitle: "(Current through August 25)"
-author: "Dani Treisman"
+subtitle: (Current through August 25)
 editor_options:
   chunk_output_type: console
+urlcolor: blue
 ---
 
-```{r echo=F, out.width='10%', }
-library(knitr)
-include_graphics("C:/Users/dtrei/Desktop/1200px-Major_League_Baseball_logo.jpg")
-```
 
-# Background
+```{r echo=F, out.width='10%', }
+# library(knitr)
+# include_graphics("C:/Users/dtrei/Desktop/1200px-Major_League_Baseball_logo.jpg")
+```
+ 
 
 It may be cliche at this point, but the 2020 MLB season has been anything but ordinary. With this season being almost a third the length of a regular season AND starting several months late, there will likely be many deviations from traditional sabermetric models and ideas.  
 For example, there is an idea that the strikeout rates are correlated with the rate of homeruns. The basic idea is that players who hit more homeruns are swinging harder and being a bit less selective with the hope for a bigger payoff. It's a risk-reward trade off. This phenomenon is explained in depth in [this](https://fivethirtyeight.com/features/you-cant-have-home-runs-without-strikeouts/#:~:text=The%20defining%20characteristics%20of%20baseball,are%206.4%20strikeouts%20per%20homer.) article by Michael Salfino of FiveThirtyEight in 2019. 
@@ -62,7 +64,7 @@ so <- rbind(so, so2020)
 ```
 > ###### Fig. 1  
 
-```{r echo=F, fig.align='center', out.width='70%'}
+```{r echo=F, fig.align='center', fig.height=3, fig.width=8}
 ggplot(so, aes(x=factor(yearID), y=kpg))+ 
   geom_bar(stat = "identity", fill = "#D50032", color = "white") + 
   geom_point(shape = 18, size = 2) +
@@ -162,7 +164,7 @@ To verify this I looked at Ks per game in 2020 (July/August) versus March/April 
 
 > ###### Fig. 2  
 
-```{r echo=F, fig.align='center', out.width='70%'}
+```{r echo=F, fig.align='center', fig.height=3, fig.width=8}
 #strikeouts per game by year in first month of season
 ggplot(early_szn_so, aes(x=factor(yearID), y=kpg)) + 
   geom_bar(stat = "identity", fill = "#D50032", color = "white") + 
@@ -217,9 +219,9 @@ game_data_so_cumsum$Game_Num <- rep(c(1:162), 3)
 
 > ###### Fig.3  
 
-```{r echo=F, fig.align='center'}
+```{r echo=F, fig.align='center', fig.height=4, fig.width=7}
 p <- ggplot(game_data_so_cumsum, aes(x=Game_Num, y=sum_k, group=factor(year), color=factor(year))) + 
-  geom_point() +
+  geom_point(alpha=0.2) +
   geom_smooth(se=F) +
   xlim(0,162) +
   theme_minimal() +
@@ -232,7 +234,9 @@ suppressMessages(print(p))
 ```
 
 
-As I mentioned earlier, there is [evidence](https://fivethirtyeight.com/features/you-cant-have-home-runs-without-strikeouts/#:~:text=The%20defining%20characteristics%20of%20baseball,are%206.4%20strikeouts%20per%20homer.) to suggest that homeruns are positively correlated with strikeouts, the idea being that batters who swing harder hit more homeruns but may swing and miss more often. Fig. 4 shows this trend. With so many years it is difficult to see the year axis labels, but around 1960. strikeouts per season makes a dramatic increase, so I removed years before 1961 (see Fig.5).
+As I mentioned earlier, there is [evidence](https://fivethirtyeight.com/features/you-cant-have-home-runs-without-strikeouts/#:~:text=The%20defining%20characteristics%20of%20baseball,are%206.4%20strikeouts%20per%20homer.) to suggest that homeruns are positively correlated with strikeouts, the idea being that batters who swing harder hit more homeruns but may swing and miss more often. Fig. 4 shows this trend. With so many years it is difficult to see the year axis labels, but around 1960. strikeouts per season makes a dramatic increase, so I removed years before 1961 (see Fig.5).  
+
+
 ```{r include = F}
 ## HOMERUNS  
 hr <- batting %>% 
@@ -291,7 +295,7 @@ a <- batting_Reg %>%
 ```
 > ###### Fig.4  
 
-``` {R echo = F, fig.align="center"}
+``` {R echo = F, fig.align="center", fig.height=3, fig.width=7}
 #HR and Ks per year
 ggplot(a, aes(factor(yearID), SO, fill = HR)) + geom_bar(stat = 'identity') +
   theme_minimal() + 
@@ -308,12 +312,13 @@ a <- batting_Reg %>%
   summarise(SO=sum(SO), HR=sum(HR))
 
 ```
-<p></p>  
+ 
+<p></p>   
 
 > ###### Fig.5  
 
 
-``` {r echo = F, fig.align="center"}
+``` {r echo = F, fig.align="center", fig.height=3, fig.width=7}
 ggplot(a, aes(factor(yearID), SO, fill = HR)) + geom_bar(stat = 'identity') + 
   theme_minimal() +
   ggtitle("Ks per Year, Colored by HRs") + 
@@ -322,14 +327,21 @@ ggplot(a, aes(factor(yearID), SO, fill = HR)) + geom_bar(stat = 'identity') +
 
 
 ```
-<p></p>  
+
+
+>
+>  
+>  
+
+
+
 
 Zooming into the last 10 years, Homeruns per game have increased since 2011, although not as consistently between years. Homeruns per game are down compared to last year (Fig.6) and about equal when looking at just the first month of the season (Fig.7).  
-<p></p>  
+ 
 
 > ###### Fig.6  
 
-```{r echo = F, fig.align='center'}
+```{r echo = F, fig.align='center', fig.height=3, fig.width=8}
 #HR per game by year 
 ggplot(hr, aes(x=factor(yearID), y=HR_pg))+ 
   geom_bar(stat = "identity", fill = "#D50032", color = "white") + 
@@ -349,7 +361,7 @@ ggplot(hr, aes(x=factor(yearID), y=HR_pg))+
 <p></p>  
 > ###### Fig.7  
 
-```{r echo = F, fig.align='center' }
+```{r echo = F, fig.align='center', fig.height=3, fig.width=8 }
 #hr per game by year in first month of season
 ggplot(early_szn_hr, aes(x=factor(yearID), y=HR_pg)) + 
   geom_bar(stat = "identity", fill = "#D50032", color = "white") + 
@@ -367,7 +379,7 @@ ggplot(early_szn_hr, aes(x=factor(yearID), y=HR_pg)) +
   #       axis.text = element_text(size=11))
 ```
 
-Of course, homeruns and strikeouts are not perfectly correlated, but I am not sure why the strikeout rate is consistently increasing every year while the homerun rate, and likely many other measures, have higher variability. Fig.8  shows the distributions of HRs and Ks per season. <p></p>  
+It makes sense that homeruns have more variability than strikeouts since they can often depend on weather, ballpark, and other factors. Also, homeruns and strikeouts are not perfectly correlated, but I am not sure why the strikeout rate is consistently increasing every year while the homerun rate, and likely many other measures, have higher variability. Fig.8  shows the distributions of HRs and Ks per season.  
 
 > ###### Fig.8  
 
@@ -388,7 +400,7 @@ so_anova_Set <- so_anova_Set %>%
   summarise(kpg=SO/G, HR_pg=HR/G)
 ```
 
-```{r echo = F, fig.show="hold", out.width="50%"}
+```{r echo = F, fig.show="hold", out.width="50%", fig.height=3, fig.width=5.5}
 
 ggplot(so_anova_Set, aes(x=factor(yearID), y=kpg, fill = yearID, alpha= 0.5)) + 
   geom_violin(trim=F, size = .2, width = .8) + 
@@ -503,7 +515,7 @@ tm_so_pct_change
 
 > ###### Fig.10  
 
-```{r echo=F, fig.show="hold", out.width="50%"}
+```{r echo=F, fig.show="hold", out.width="50%", fig.height=4}
 ggplot(tm_so_pct_change, aes(x=reorder(factor(teamID),-pct_change_so), y=pct_change_so, fill=pct_change_so)) + 
   geom_bar(stat = 'identity') +
   theme_minimal() + 
@@ -525,6 +537,11 @@ ggplot(tm_so_pct_change, aes(x=reorder(factor(teamID),-pct_change_hr), y=pct_cha
   ggtitle("Percent Change in HR Rate from 2019 to 2020")
 ```
 <p></p>  
+>  
+>  
+>  
+>  
+
 We can see from Fig.10 the high variability of the HR rate among all teams with Detroit at a 49.46% increase and Texas with a 39.86% decrease in homeruns per game. Strikeout rates seem slightly more normalized with but two teams standing out at each extreme. Oakland and Pittsburgh stand out with a 21.43% and 21.22% increase in K rate, respectively. Atlanta was the next closest team at a 10.38% increase. Fig.11 shows these numbers side by side for each team.  
 ```{r include=F}
 sorted <- unlist(c(tm_so_pct_change[order(tm_so_pct_change$pct_change_so, decreasing = T),1]))
@@ -532,16 +549,34 @@ tm_so_pct_change_sorted <- tm_so_pct_change
 tm_so_pct_change_sorted$teamID <- factor(tm_so_pct_change_sorted$teamID, levels = sorted)
 names(tm_so_pct_change_sorted) <- c("teamID", "Strikeouts", "Homeruns")
 ```
+>  
+>  
+>  
+>  
+>  
+>  
+>  
+>  
+>  
+>  
+>  
+>  
+>
+>  
+>  
+>  
+>  
 
 > ###### Fig.11  
 
-```{r echo=F, fig.align='center'}
+```{r echo=F, fig.align='center', fig.height=3, fig.width=7}
 ggplot(melt(tm_so_pct_change_sorted, id.vars = "teamID"),aes(x=teamID,y=value,fill=factor(variable))) + 
   geom_bar(stat = 'identity', position='dodge') +
   theme_minimal() + 
   theme(axis.text.x = element_text(angle=45, vjust=0.5),
         legend.title = element_blank()) + 
   scale_fill_manual(values = c("#002D72", "#D50032")) +
+  ylim(-85,90) +
   ylab("Percent Change from 2019") +
   xlab("") +
   ggtitle("Percent Change in K Rate and HR Rate From 2019 to 2020")
@@ -594,16 +629,31 @@ names(tm_so_pct_change_sorted_2018) <- c("teamID", "Strikeouts", "Homeruns")
 ```
 > ###### Fig.13  
 
-```{r echo=F, fig.align="center"}
+```{r echo=F, fig.align="center", fig.height=3, fig.width=7}
 ggplot(melt(tm_so_pct_change_sorted_2018, id.vars = "teamID"),aes(x=teamID,y=value,fill=factor(variable))) + 
   geom_bar(stat = 'identity', position='dodge') +
   theme_minimal() + 
   theme(axis.text.x = element_text(angle=45, vjust=0.5),
         legend.title = element_blank()) + 
   scale_fill_manual(values = c("#002D72", "#D50032")) +
+  ylim(-85,90) +
   ylab("Percent Change from 2019") +
   xlab("") +
   ggtitle("Percent Change in K Rate and HR Rate From 2018 to 2019")
 ```
+The 2020 MLB season has already shown signs of its uniqueness in many ways. The homerun-strikeout trade-off will likely continue and the rates for both will likely continue to increase over the next several years unless a new approach is discovered. Sabermetrics is constantly evolving with the growing availablity and specificty of game data and it will be interesting to see how hitting approaches change as the number of tools available for analysis continue to increase. I am excited at the insights I have found regarding strikeouts and homeruns this season and look forward to analyzing more aspects of the 2020 season.  
 
+>   
+>  
+>  
+>  
+>  
 
+```{r}
+
+```
+
+Socials:  
+[LinkedIn](https://www.linkedin.com/in/dani-treisman/)  
+[Twitter](https://twitter.com/DaniTreisman)  
+[GitHub](https://dtreisman.github.io/Portfolio/) 
